@@ -5,10 +5,13 @@ cd "$(dirname "$0")"
 
 APP=CurrentTask.app
 rm -rf "$APP"
-mkdir -p "$APP/Contents/MacOS"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 
 swiftc -O -parse-as-library -target arm64-apple-macos13.0 \
   CurrentTask.swift -o "$APP/Contents/MacOS/CurrentTask"
+
+# App icon (regenerate with: swift scripts/make-icon.swift)
+cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 
 # LSUIElement = menu-bar-only app (no Dock icon, no app menu).
 cat > "$APP/Contents/Info.plist" <<'PLIST'
@@ -19,6 +22,7 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
   <key>CFBundleName</key><string>CurrentTask</string>
   <key>CFBundleIdentifier</key><string>local.currenttask</string>
   <key>CFBundleExecutable</key><string>CurrentTask</string>
+  <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>CFBundleShortVersionString</key><string>1.0</string>
   <key>LSMinimumSystemVersion</key><string>13.0</string>
